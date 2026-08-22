@@ -196,13 +196,21 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
    ANIMAÇÃO 1 — "Folhas e Penas ao Vento" (camada ambiente no hero)
    Técnica: CSS puro, formas geradas via clip-path, deriva com sway
    =================================================================== */
+/* ===================================================================
+   ANIMAÇÃO 1 — "Folhas e Penas ao Vento" (camada ambiente, SVG detalhado)
+   Técnica: SVG real (raque+barbas / nervuras), deriva com sway + giro
+   =================================================================== */
 .axp-vento{position:absolute; inset:0; z-index:1; overflow:hidden; pointer-events:none}
-.axp-folha{position:absolute; top:-40px; opacity:.55; animation-name:axpCair, axpBalancar; animation-timing-function:linear, ease-in-out; animation-iteration-count:infinite, infinite}
-.axp-folha.tipo-folha{width:16px; height:22px; background:linear-gradient(135deg,var(--verde-claro),var(--verde)); border-radius:0 70% 0 70%}
-.axp-folha.tipo-pena{width:8px; height:26px; background:linear-gradient(180deg,var(--vermelho),rgba(208,32,46,.2)); border-radius:50% 50% 50% 50% / 20% 20% 80% 80%}
-@keyframes axpCair{ from{ transform:translateY(-5vh);} to{ transform:translateY(105vh);} }
-@keyframes axpBalancar{ 0%,100%{ margin-left:0px;} 50%{ margin-left:60px;} }
-@media (prefers-reduced-motion: reduce){ .axp-folha{animation:none; display:none} }
+.axp-folha-svg{position:absolute; top:-60px; animation-name:axpCair, axpBalancar, axpGirarLeve; animation-timing-function:linear, ease-in-out, linear; animation-iteration-count:infinite, infinite, infinite; filter:drop-shadow(0 3px 4px rgba(0,0,0,.18))}
+.axp-folha-svg.cor-verde{color:var(--verde-claro)}
+.axp-folha-svg.cor-verde2{color:var(--verde)}
+.axp-folha-svg.cor-vermelho{color:var(--vermelho)}
+.axp-vento.claro .axp-folha-svg.cor-verde{color:var(--verde)}
+.axp-vento.claro .axp-folha-svg.cor-vermelho{color:var(--vermelho-esc)}
+@keyframes axpCair{ from{ transform:translateY(-8vh);} to{ transform:translateY(108vh);} }
+@keyframes axpBalancar{ 0%,100%{ margin-left:0px;} 50%{ margin-left:70px;} }
+@keyframes axpGirarLeve{ from{ rotate:0deg;} to{ rotate:360deg;} }
+@media (prefers-reduced-motion: reduce){ .axp-folha-svg{animation:none; display:none} }
 
 /* ===================================================================
    ANIMAÇÃO 2 — "Grafismo que se Desenha" (tecelagem indígena, SVG line-draw)
@@ -254,6 +262,36 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
    e se transformam gradualmente em folha ao longo da vida
    =================================================================== */
 .axp-fumaca-canvas{position:absolute; inset:0; width:100%; height:100%; z-index:0; opacity:.55}
+
+/* ===================================================================
+   ANIMAÇÃO 6 — "Campo de Estrelas" (ceu noturno sutil em secoes escuras)
+   Técnica: pontos gerados via JS, cintilacao com opacidade+escala em loop
+   =================================================================== */
+.axp-estrelas{position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none}
+.axp-estrela{position:absolute; border-radius:50%; background:#fff; animation-name:axpCintilar; animation-timing-function:ease-in-out; animation-iteration-count:infinite}
+@keyframes axpCintilar{ 0%,100%{ opacity:.15; transform:scale(.7);} 50%{ opacity:1; transform:scale(1.15);} }
+@media (prefers-reduced-motion: reduce){ .axp-estrela{animation:none; opacity:.5} }
+
+/* ===================================================================
+   ANIMAÇÃO 7 — "Sol Ancestral" (sol + iconografia solar indigena)
+   Técnica: SVG com raios triangulares, rotacao lenta continua + glow pulsante
+   =================================================================== */
+.axp-sol-wrap{display:flex; justify-content:center; margin-bottom:-40px; position:relative; z-index:0}
+.axp-sol-svg{width:260px; height:260px; max-width:70vw; color:var(--verde-claro); opacity:.5;
+  animation:axpSolGirar 90s linear infinite, axpSolBrilho 5s ease-in-out infinite}
+@keyframes axpSolGirar{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+@keyframes axpSolBrilho{ 0%,100%{ filter:drop-shadow(0 0 10px rgba(63,174,114,.25)); } 50%{ filter:drop-shadow(0 0 28px rgba(63,174,114,.55)); } }
+@media (prefers-reduced-motion: reduce){ .axp-sol-svg{animation:none} }
+@media(max-width:640px){ .axp-sol-wrap{margin-bottom:-20px} }
+
+/* ===================================================================
+   ANIMAÇÃO 8 — "Luz Ancestral" (glow suave atras de titulos-chave)
+   Técnica: radial-gradient pulsante posicionado atras do conteudo
+   =================================================================== */
+.axp-luz{position:absolute; z-index:0; border-radius:50%; pointer-events:none; filter:blur(40px);
+  animation:axpLuzPulsar 6s ease-in-out infinite}
+@keyframes axpLuzPulsar{ 0%,100%{ opacity:.35; transform:scale(1);} 50%{ opacity:.6; transform:scale(1.12);} }
+@media (prefers-reduced-motion: reduce){ .axp-luz{animation:none; opacity:.4} }
 </style>
 </head>
 <body>
@@ -267,6 +305,49 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
       <path d="M55 130 L108 78 L130 130 Z"/>
       <path d="M70 130 L100 100 L112 130 Z" fill="currentColor" opacity=".25"/>
       <circle cx="100" cy="100" r="46" stroke-dasharray="1 5"/>
+    </g>
+  </symbol>
+
+  <!-- Pena detalhada: raque central + barbas radiantes reais, nao mais um losango CSS -->
+  <symbol id="axp-pena-detalhada" viewBox="0 0 40 140">
+    <path d="M20,4 C7,20 2,44 2,70 C2,96 7,118 20,136 C33,118 38,96 38,70 C38,44 33,20 20,4 Z" fill="currentColor" opacity=".16"/>
+    <line x1="20" y1="6" x2="20" y2="132" stroke="currentColor" stroke-width="1.4" opacity=".9"/>
+    <path d="M20,14 Q9,23 4,37 M20,28 Q7,38 3,53 M20,42 Q6,52 2,67 M20,56 Q5,66 2,81 M20,70 Q5,80 3,94 M20,84 Q6,92 5,105 M20,98 Q8,105 7,116 M20,112 Q11,117 10,125"
+      stroke="currentColor" stroke-width=".9" fill="none" opacity=".75" stroke-linecap="round"/>
+    <path d="M20,14 Q31,23 36,37 M20,28 Q33,38 37,53 M20,42 Q34,52 38,67 M20,56 Q35,66 38,81 M20,70 Q35,80 37,94 M20,84 Q34,92 35,105 M20,98 Q32,105 33,116 M20,112 Q29,117 30,125"
+      stroke="currentColor" stroke-width=".9" fill="none" opacity=".75" stroke-linecap="round"/>
+  </symbol>
+
+  <!-- Folha detalhada: nervura central + nervuras laterais, gradiente de forma -->
+  <symbol id="axp-folha-detalhada" viewBox="0 0 60 100">
+    <path d="M30,3 C48,20 55,48 30,97 C5,48 12,20 30,3 Z" fill="currentColor"/>
+    <path d="M30,10 L30,88" stroke="rgba(255,255,255,.4)" stroke-width="1.1" fill="none"/>
+    <path d="M30,22 L15,33 M30,22 L45,33 M30,39 L13,50 M30,39 L47,50 M30,56 L15,66 M30,56 L45,66 M30,73 L18,81 M30,73 L42,81"
+      stroke="rgba(255,255,255,.3)" stroke-width=".8" fill="none" stroke-linecap="round"/>
+  </symbol>
+
+  <!-- Sol Ancestral: sol com raios triangulares (iconografia solar indigena) + aneis concentricos -->
+  <symbol id="axp-sol-ancestral" viewBox="0 0 240 240">
+    <g fill="none" stroke="currentColor">
+      <circle cx="120" cy="120" r="108" stroke-width="1" stroke-dasharray="1 9" opacity=".5"/>
+      <circle cx="120" cy="120" r="86" stroke-width="1.4" stroke-dasharray="2 6" opacity=".65"/>
+      <g id="axp-sol-raios">
+        <path d="M120 34 L127 58 L113 58 Z" fill="currentColor" opacity=".85"/>
+      </g>
+      <use href="#axp-sol-raios" transform="rotate(30 120 120)"/>
+      <use href="#axp-sol-raios" transform="rotate(60 120 120)"/>
+      <use href="#axp-sol-raios" transform="rotate(90 120 120)"/>
+      <use href="#axp-sol-raios" transform="rotate(120 120 120)"/>
+      <use href="#axp-sol-raios" transform="rotate(150 120 120)"/>
+      <use href="#axp-sol-raios" transform="rotate(180 120 120)"/>
+      <use href="#axp-sol-raios" transform="rotate(210 120 120)"/>
+      <use href="#axp-sol-raios" transform="rotate(240 120 120)"/>
+      <use href="#axp-sol-raios" transform="rotate(270 120 120)"/>
+      <use href="#axp-sol-raios" transform="rotate(300 120 120)"/>
+      <use href="#axp-sol-raios" transform="rotate(330 120 120)"/>
+      <circle cx="120" cy="120" r="46" fill="currentColor" opacity=".12" stroke-width="2"/>
+      <circle cx="120" cy="120" r="46" stroke-width="2"/>
+      <circle cx="120" cy="120" r="30" stroke-width="1.4" stroke-dasharray="3 4" opacity=".8"/>
     </g>
   </symbol>
 </svg>
@@ -291,9 +372,11 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
 
 <!-- HERO -->
 <section class="hero" id="top">
+  <div class="axp-estrelas" id="axp-estrelas-hero" aria-hidden="true"></div>
   <canvas id="axp-particulas"></canvas>
   <div class="axp-vento" id="axp-vento" aria-hidden="true"></div>
   <div class="wrap hero-conteudo">
+    <div class="axp-luz" style="width:340px;height:340px;left:50%;top:60px;transform:translateX(-50%);background:radial-gradient(circle,rgba(208,32,46,.35),rgba(27,122,61,.25) 55%,transparent 75%)"></div>
     <img src="imgs/aldeiaxp-logo-escura.png" alt="Aldeia XP" style="height:110px;display:block;margin:0 auto 24px;position:relative;z-index:2">
     <span class="eyebrow">Comunicação · Audiovisual · Proteção Cultural Indígena</span>
     <h1>Contar a história indígena com a <em>voz de quem a vive</em></h1>
@@ -343,10 +426,11 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
 </section>
 
 <!-- AREAS DE ATUACAO -->
-<section id="atuacao" class="tex-fundo-claro" style="position:relative">
+<section id="atuacao" class="tex-fundo-claro" style="position:relative; overflow:hidden">
+  <div class="axp-vento claro" data-densidade="5" aria-hidden="true"></div>
   <svg class="axp-orn axp-orn-tl" viewBox="0 0 200 200" aria-hidden="true"><use href="#axp-grafismo"/></svg>
   <svg class="axp-orn axp-orn-br" viewBox="0 0 200 200" aria-hidden="true"><use href="#axp-grafismo"/></svg>
-  <div class="wrap">
+  <div class="wrap" style="position:relative;z-index:1">
     <div class="sec-head">
       <span class="eyebrow">O que fazemos</span>
       <h2>Sete frentes, <em>uma só</em> missão</h2>
@@ -368,7 +452,8 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
 <div class="axp-faixa3d-wrap"><canvas id="axp-faixa3d"></canvas></div>
 
 <!-- NOSSA CAUSA -->
-<section id="causa" class="sec-escura" style="position:relative">
+<section id="causa" class="sec-escura" style="position:relative; overflow:hidden">
+  <div class="axp-estrelas" id="axp-estrelas-causa" aria-hidden="true"></div>
   <canvas id="axp-fumaca" class="axp-fumaca-canvas" aria-hidden="true"></canvas>
   <div class="wrap" style="position:relative;z-index:2">
     <div class="sec-head">
@@ -377,6 +462,7 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
       <p style="color:rgba(255,255,255,.75)">Crise climática e apropriação cultural não são temas separados — as duas ameaçam a mesma coisa: a relação do povo indígena com seu território, seu bioma e sua própria narrativa.</p>
     </div>
     <div class="axp-pulso-wrap reveal">
+      <div class="axp-luz" style="width:260px;height:260px;left:50%;top:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(208,32,46,.4),transparent 70%)"></div>
       <svg class="axp-pulso-svg" viewBox="0 0 200 200">
         <defs>
           <linearGradient id="axp-grad-pulso" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -563,8 +649,13 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
 </section>
 
 <!-- FOTOS E VIDEOS -->
-<section id="midia" class="sec-escura">
-  <div class="wrap">
+<section id="midia" class="sec-escura" style="position:relative; overflow:hidden">
+  <div class="axp-estrelas" id="axp-estrelas-midia" aria-hidden="true"></div>
+  <div class="axp-vento" data-densidade="5" aria-hidden="true"></div>
+  <div class="wrap" style="position:relative;z-index:1">
+    <div class="axp-sol-wrap reveal" aria-hidden="true">
+      <svg class="axp-sol-svg" viewBox="0 0 240 240"><use href="#axp-sol-ancestral"/></svg>
+    </div>
     <div class="sec-head">
       <span class="eyebrow" style="color:var(--verde-claro)">Acervo</span>
       <h2 style="color:#fff">Fotos e <em style="color:var(--verde-claro)">vídeos</em></h2>
@@ -764,25 +855,62 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
   }
 
   // ============================================================
-  // ANIMAÇÃO 1 — Folhas e Penas ao Vento (gera as particulas no DOM)
+  // ANIMAÇÃO 1 — Folhas e Penas ao Vento (SVG detalhado, reutilizavel)
   // ============================================================
   try{
-    var ventoEl = document.getElementById('axp-vento');
-    if (ventoEl){
-      var totalFolhas = telaEstreita ? 8 : 16;
-      for (var fi=0; fi<totalFolhas; fi++){
-        var el = document.createElement('div');
-        var tipo = fi % 2 === 0 ? 'tipo-folha' : 'tipo-pena';
-        el.className = 'axp-folha ' + tipo;
-        el.style.left = (Math.random()*100) + '%';
-        var duracaoCair = 10 + Math.random()*10;
-        var duracaoBalanco = 3 + Math.random()*2;
-        el.style.animationDuration = duracaoCair + 's, ' + duracaoBalanco + 's';
-        el.style.animationDelay = (Math.random()*duracaoCair*-1) + 's, ' + (Math.random()*duracaoBalanco*-1) + 's';
-        el.style.transform = 'rotate(' + (Math.random()*360) + 'deg)';
-        ventoEl.appendChild(el);
-      }
+    var svgNS = 'http://www.w3.org/2000/svg';
+    var xlinkNS = 'http://www.w3.org/1999/xlink';
+    var coresCiclo = ['cor-verde','cor-verde2','cor-vermelho'];
+    function criarParticulaVento(container, coresDisponiveis){
+      var tipo = Math.random() < 0.32 ? 'pena' : 'folha';
+      var svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('viewBox', tipo === 'pena' ? '0 0 40 140' : '0 0 60 100');
+      var tam = tipo === 'pena' ? (13 + Math.random()*9) : (15 + Math.random()*11);
+      var altura = tipo === 'pena' ? tam*3.3 : tam*1.55;
+      svg.setAttribute('width', tam);
+      svg.setAttribute('height', altura);
+      var cor = coresDisponiveis[Math.floor(Math.random()*coresDisponiveis.length)];
+      svg.setAttribute('class', 'axp-folha-svg ' + cor);
+      var use = document.createElementNS(svgNS, 'use');
+      var alvo = tipo === 'pena' ? '#axp-pena-detalhada' : '#axp-folha-detalhada';
+      use.setAttributeNS(xlinkNS, 'href', alvo);
+      use.setAttribute('href', alvo);
+      svg.appendChild(use);
+      svg.style.left = (Math.random()*100) + '%';
+      var duracaoCair = 12 + Math.random()*12;
+      var duracaoBalanco = 3 + Math.random()*2.6;
+      var duracaoGiro = 6 + Math.random()*9;
+      svg.style.animationDuration = duracaoCair+'s, '+duracaoBalanco+'s, '+duracaoGiro+'s';
+      svg.style.animationDelay = (Math.random()*duracaoCair*-1)+'s, '+(Math.random()*duracaoBalanco*-1)+'s, '+(Math.random()*duracaoGiro*-1)+'s';
+      svg.style.opacity = (0.32 + Math.random()*0.4).toFixed(2);
+      container.appendChild(svg);
     }
+    document.querySelectorAll('.axp-vento').forEach(function(ventoEl){
+      var densidade = parseInt(ventoEl.getAttribute('data-densidade'), 10) || (telaEstreita ? 7 : 14);
+      for (var fi=0; fi<densidade; fi++){ criarParticulaVento(ventoEl, coresCiclo); }
+    });
+  }catch(e){}
+
+  // ============================================================
+  // ANIMAÇÃO 6 — Campo de Estrelas (ceu cintilante nas secoes escuras)
+  // ============================================================
+  try{
+    document.querySelectorAll('.axp-estrelas').forEach(function(campoEl){
+      var totalEstrelas = telaEstreita ? 26 : 55;
+      for (var si=0; si<totalEstrelas; si++){
+        var estrela = document.createElement('div');
+        estrela.className = 'axp-estrela';
+        var tam = 1 + Math.random()*2.2;
+        estrela.style.width = tam+'px';
+        estrela.style.height = tam+'px';
+        estrela.style.left = (Math.random()*100)+'%';
+        estrela.style.top = (Math.random()*100)+'%';
+        var duracao = 2 + Math.random()*4;
+        estrela.style.animationDuration = duracao+'s';
+        estrela.style.animationDelay = (Math.random()*duracao*-1)+'s';
+        campoEl.appendChild(estrela);
+      }
+    });
   }catch(e){}
 
   // ============================================================
