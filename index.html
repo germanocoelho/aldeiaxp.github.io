@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aldeia XP — Comunicação, Audiovisual e Proteção Cultural Indígena</title>
+<meta name="description" content="Aldeia XP: comunicação e audiovisual (rádio, TV, jornalismo, artes), apoio institucional a povos indígenas, proteção de propriedade intelectual e conhecimentos tradicionais, e enfrentamento da crise climática e da apropriação cultural.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{
+  /* Paleta extraida da logomarca Aldeia XP */
+  --vermelho:#D0202E;
+  --vermelho-esc:#8C1620;
+  --verde:#1B7A3D;
+  --verde-claro:#3FAE72;
+  --carvao:#181B1F;
+  --carvao-2:#22262C;
+  --carvao-3:#2E333A;
+  --marfim:#F7F5F0;
+  --branco:#FFFFFF;
+  --tinta:#14171A;
+  --cinza:#68707A;
+  --linha:#E4E1D8;
+  --r:16px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Inter',system-ui,sans-serif;color:var(--tinta);background:var(--marfim);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;line-height:1.14;margin:0}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+section{padding:100px 0}
+.eyebrow{font-size:.74rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--vermelho)}
+img{max-width:100%}
+
+/* ===== BOTOES ===== */
+.btn{display:inline-flex;align-items:center;gap:.55em;font-weight:700;font-size:.96rem;padding:15px 30px;border-radius:100px;transition:.25s;cursor:pointer;border:none}
+.btn-primario{background:var(--vermelho);color:#fff}
+.btn-primario:hover{background:var(--vermelho-esc);transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(208,32,46,.5)}
+.btn-verde{background:var(--verde);color:#fff}
+.btn-verde:hover{background:#155f31;transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(27,122,61,.5)}
+.btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.32)}
+.btn-ghost:hover{border-color:var(--verde-claro);color:var(--verde-claro)}
+
+/* ===== REVEAL ===== */
+.reveal{opacity:0;transform:translateY(24px);transition:.7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal-l{opacity:0;transform:translateX(-40px);transition:.8s cubic-bezier(.2,.7,.2,1)}
+.reveal-r{opacity:0;transform:translateX(40px);transition:.8s cubic-bezier(.2,.7,.2,1)}
+.reveal-l.in,.reveal-r.in{opacity:1;transform:none}
+
+/* ===== TILT ===== */
+.tilt{transform-style:preserve-3d;transition:transform .18s ease-out;will-change:transform}
+
+/* ===== GRAFISMO ALDEIA XP (marca d'agua + ornamentos) — motivo original derivado
+   do triangulo duplo da propria logo (montanha/seta) com padrao geometrico indigena ===== */
+.axp-marca-dagua{position:absolute; z-index:0; top:50%; left:50%; width:560px; height:560px; max-width:100%; max-height:100%;
+  transform:translate(-50%,-50%); color:var(--vermelho); opacity:.06; pointer-events:none; animation:axpGirar 120s linear infinite;}
+@keyframes axpGirar{ from{transform:translate(-50%,-50%) rotate(0)} to{transform:translate(-50%,-50%) rotate(360deg)} }
+.axp-orn{position:absolute; z-index:0; width:60px; height:60px; color:var(--verde-claro); opacity:.5; pointer-events:none;
+  filter:drop-shadow(0 0 6px rgba(63,174,114,.3)); animation:axpPulso 5s ease-in-out infinite;}
+@media (max-width:640px){ .axp-orn{width:36px !important; height:36px !important} }
+.axp-orn-tl{top:16px; left:16px;} .axp-orn-tr{top:16px; right:16px; transform:rotate(90deg);}
+.axp-orn-br{bottom:16px; right:16px; transform:rotate(180deg);} .axp-orn-bl{bottom:16px; left:16px; transform:rotate(270deg);}
+@keyframes axpPulso{ 0%,100%{opacity:.35} 50%{opacity:.62} }
+@media (prefers-reduced-motion: reduce){ .axp-marca-dagua,.axp-orn{animation:none} }
+
+/* ===== FAIXA 3D (divisor) ===== */
+.axp-faixa3d-wrap{position:relative; width:100%; height:150px; overflow:hidden; background:linear-gradient(180deg, transparent, rgba(208,32,46,.04), transparent)}
+.axp-faixa3d-wrap canvas{width:100%; height:100%; display:block}
+@media (max-width:640px){ .axp-faixa3d-wrap{height:100px} }
+
+/* ===== HERO ===== */
+.hero{position:relative; background:radial-gradient(120% 130% at 50% -10%,var(--carvao-3),var(--carvao) 55%,#0A0C0E 100%); color:#fff; overflow:hidden; padding:150px 0 120px}
+#axp-particulas{position:absolute; inset:0; width:100%; height:100%; z-index:0}
+.hero-conteudo{position:relative; z-index:2; text-align:center; max-width:840px; margin:0 auto}
+.hero h1{font-size:clamp(2.1rem,4.6vw,3.7rem); color:#fff; margin:16px 0 8px}
+.hero h1 em{font-style:italic; background:linear-gradient(90deg,var(--vermelho),var(--verde-claro)); -webkit-background-clip:text; background-clip:text; color:transparent}
+.hero .sub{font-size:1.12rem; color:rgba(255,255,255,.8); max-width:660px; margin:14px auto 34px}
+.hero-cta{display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:8px}
+.hero-kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; max-width:920px; margin:56px auto 0; position:relative; z-index:2}
+.hero-kpi{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.13); border-radius:14px; padding:18px 10px; text-align:center; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px)}
+.hero-kpi .num{font-family:'Fraunces',serif; font-size:1.6rem; font-weight:700; background:linear-gradient(90deg,var(--vermelho),var(--verde-claro));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-kpi .lbl{font-size:.7rem; color:rgba(255,255,255,.72); margin-top:4px}
+@media(max-width:760px){ .hero-kpis{grid-template-columns:repeat(2,1fr)} }
+
+/* ===== SECAO HEAD ===== */
+.sec-head{max-width:700px; margin:0 auto 44px; text-align:center}
+.sec-head h2{font-size:clamp(1.6rem,3vw,2.3rem); margin-top:8px}
+.sec-head h2 em{font-style:italic; color:var(--vermelho)}
+.sec-head p{color:var(--cinza); margin-top:12px; font-size:1.02rem}
+
+/* ===== NAVEGACAO ===== */
+.nav{position:fixed; top:0; left:0; right:0; z-index:100; padding:14px 0; transition:.3s; background:rgba(24,27,31,0)}
+.nav.scrolled{background:rgba(24,27,31,.95); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); padding:10px 0; box-shadow:0 8px 30px -12px rgba(0,0,0,.5)}
+.nav-inner{display:flex; align-items:center; justify-content:space-between}
+.nav-brand-img{height:38px; display:block}
+.nav-links{display:flex; align-items:center; gap:24px}
+.nav-links a{color:rgba(255,255,255,.86); font-size:.9rem; font-weight:600; transition:.2s}
+.nav-links a:hover{color:var(--verde-claro)}
+.nav-cta{padding:11px 22px !important}
+.burger{display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:6px; position:relative; z-index:120}
+.burger span{width:24px;height:2px;background:#fff;border-radius:2px;transition:.3s;transform-origin:center}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+@media(max-width:920px){
+  .nav-links{position:fixed; top:0; right:-100%; width:78%; max-width:320px; height:100vh; background:var(--carvao); flex-direction:column; justify-content:center; align-items:flex-start; padding:40px; transition:.35s; gap:22px}
+  .nav-links.open{right:0}
+  .burger{display:flex}
+}
+
+/* ===== SOBRE: disco animado ===== */
+.sobre-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:60px; align-items:center; position:relative; z-index:1}
+@media(max-width:900px){.sobre-grid{grid-template-columns:1fr; gap:36px}}
+.sobre-arte{display:flex; justify-content:center}
+.sobre-disc{width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(208,32,46,.08),transparent 70%);border:1.5px solid rgba(208,32,46,.18);display:grid;place-items:center;position:relative;animation:float 6s ease-in-out infinite}
+.sobre-disc::before{content:"";position:absolute;inset:22px;border-radius:50%;border:1px dashed rgba(27,122,61,.25)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.disc-ping{position:absolute; inset:0; margin:auto; width:100%; height:100%; border-radius:50%; border:1.5px solid rgba(208,32,46,.4); opacity:0; animation:discPing 3.6s cubic-bezier(.2,.7,.2,1) infinite; pointer-events:none;}
+.disc-ping.p1{animation-delay:0s} .disc-ping.p2{animation-delay:1.2s} .disc-ping.p3{animation-delay:2.4s}
+@keyframes discPing{ 0%{transform:scale(.55); opacity:.55} 100%{transform:scale(1.35); opacity:0} }
+.disc-orbit{position:absolute; top:50%; left:50%; width:6px; height:6px; margin:-3px 0 0 -3px; border-radius:50%; background:var(--verde); box-shadow:0 0 8px 2px rgba(27,122,61,.6); pointer-events:none;}
+.disc-orbit.o1{animation:discOrbit 9s linear infinite}
+.disc-orbit.o2{width:4px;height:4px;margin:-2px 0 0 -2px;animation:discOrbit 13s linear infinite reverse}
+.disc-orbit.o3{width:5px;height:5px;margin:-2.5px 0 0 -2.5px;opacity:.75;animation:discOrbit 17s linear infinite}
+.disc-orbit.o4{width:3px;height:3px;margin:-1.5px 0 0 -1.5px;opacity:.6;animation:discOrbit 11s linear infinite reverse}
+@keyframes discOrbit{ from{ transform:rotate(0deg) translateX(148px) rotate(0deg);} to{ transform:rotate(360deg) translateX(148px) rotate(-360deg);} }
+.disc-anel-svg{ animation:axpGirar 45s linear infinite; transform-origin:center; }
+@media (prefers-reduced-motion: reduce){ .disc-ping,.disc-orbit,.disc-anel-svg,.sobre-disc{animation:none} }
+
+/* ===== ATUACAO ===== */
+.tex-fundo-claro{background:linear-gradient(180deg,var(--marfim),#EFEBE0)}
+.at-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:20px; position:relative; z-index:1}
+@media(max-width:1000px){.at-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.at-grid{grid-template-columns:1fr}}
+.at-card{background:var(--branco); border-radius:var(--r); padding:26px 22px; border:1px solid var(--linha); transition:.3s}
+.at-card:hover{transform:translateY(-6px); box-shadow:0 20px 40px -20px rgba(208,32,46,.25); border-color:rgba(27,122,61,.4)}
+.at-ic{font-size:1.7rem; margin-bottom:10px}
+.at-card h3{font-size:1.02rem; margin-bottom:6px}
+.at-card p{color:var(--cinza); font-size:.87rem}
+
+/* ===== NOSSA CAUSA ===== */
+.sec-escura{background:radial-gradient(120% 130% at 50% -10%,var(--carvao-3),var(--carvao) 60%,#0A0C0E 100%); position:relative}
+.causa-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px}
+@media(max-width:900px){.causa-grid{grid-template-columns:1fr}}
+.causa-card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.13); border-radius:var(--r); padding:30px 26px}
+.causa-ic{font-size:2rem; margin-bottom:12px}
+.causa-card h3{color:#fff; font-size:1.15rem; margin-bottom:10px}
+.causa-card p{color:rgba(255,255,255,.72); font-size:.9rem}
+
+/* ===== LEGISLACAO ===== */
+.leg-categoria{font-family:'Fraunces',serif; font-size:1.05rem; color:var(--vermelho); margin:36px 0 16px; padding-bottom:8px; border-bottom:2px solid var(--linha)}
+.leg-categoria:first-of-type{margin-top:0}
+.leg-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
+@media(max-width:900px){.leg-grid{grid-template-columns:1fr}}
+.leg-card{display:block; background:var(--branco); border:1px solid var(--linha); border-radius:var(--r); padding:22px 20px; transition:.3s}
+.leg-card:hover{transform:translateY(-4px); box-shadow:0 16px 34px -18px rgba(0,0,0,.18); border-color:rgba(27,122,61,.35)}
+.leg-selo{display:inline-block; font-size:.68rem; font-weight:700; letter-spacing:.04em; color:#fff; background:var(--verde); padding:4px 11px; border-radius:100px; margin-bottom:10px}
+.leg-card h4{font-size:.96rem; margin-bottom:6px; line-height:1.3}
+.leg-card p{color:var(--cinza); font-size:.84rem; margin-bottom:10px}
+.leg-link{color:var(--vermelho); font-size:.82rem; font-weight:700}
+
+/* ===== NOTICIAS ===== */
+.news-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px}
+@media(max-width:900px){.news-grid{grid-template-columns:1fr}}
+.news-card{display:block; background:var(--branco); border-radius:var(--r); padding:26px; border:1px solid var(--linha); transition:.3s}
+.news-card:hover{transform:translateY(-5px); box-shadow:0 20px 40px -20px rgba(0,0,0,.2)}
+.news-tag{display:inline-block; font-size:.7rem; font-weight:700; color:var(--verde); background:rgba(27,122,61,.1); padding:4px 11px; border-radius:100px; margin-bottom:12px}
+.news-card h4{font-family:'Fraunces',serif; font-size:1.06rem; margin-bottom:8px; color:var(--tinta)}
+.news-card p{color:var(--cinza); font-size:.87rem; margin-bottom:12px}
+.news-more{color:var(--vermelho); font-size:.84rem; font-weight:700}
+
+/* ===== MIDIA ===== */
+.midia-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
+@media(max-width:700px){.midia-grid{grid-template-columns:1fr 1fr}}
+.midia-item{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.13); border-radius:var(--r); padding:34px 20px; text-align:center; transition:.3s}
+.midia-item:hover{background:rgba(255,255,255,.1); transform:translateY(-5px)}
+.midia-ph{font-size:2.2rem; margin-bottom:10px}
+.midia-item span{color:rgba(255,255,255,.78); font-size:.86rem; font-weight:600}
+
+/* ===== CTA FINAL ===== */
+.cta-final{background:radial-gradient(110% 130% at 50% 0%,var(--carvao-3),var(--carvao) 55%,#0A0C0E 100%); position:relative; overflow:hidden}
+
+/* ===== RODAPE ===== */
+footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
+.footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:36px; padding-bottom:50px}
+@media(max-width:800px){.footer-grid{grid-template-columns:1fr 1fr}}
+.footer-grid h4{color:#fff; font-size:.9rem; margin-bottom:14px}
+.footer-grid a{display:block; color:rgba(255,255,255,.6); font-size:.86rem; margin-bottom:10px; transition:.2s}
+.footer-grid a:hover{color:var(--verde-claro)}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.1); padding:22px 28px; text-align:center; font-size:.78rem; color:rgba(255,255,255,.48)}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="axp-grafismo" viewBox="0 0 200 200">
+    <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="100" cy="100" r="74" stroke-dasharray="2 7"/>
+      <!-- duplo triangulo (montanha/seta), motivo original da propria marca -->
+      <path d="M70 130 L100 55 L130 130 Z"/>
+      <path d="M55 130 L108 78 L130 130 Z"/>
+      <path d="M70 130 L100 100 L112 130 Z" fill="currentColor" opacity=".25"/>
+      <circle cx="100" cy="100" r="46" stroke-dasharray="1 5"/>
+    </g>
+  </symbol>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="nav-brand">
+      <img src="imgs/aldeiaxp-logo-escura.png" alt="Aldeia XP" class="nav-brand-img">
+    </a>
+    <nav class="nav-links" id="navlinks">
+      <a href="#sobre">Quem Somos</a>
+      <a href="#atuacao">Atuação</a>
+      <a href="#causa">Nossa Causa</a>
+      <a href="#legislacao">Legislação</a>
+      <a href="#noticias">Notícias</a>
+      <a href="#midia">Fotos e Vídeos</a>
+      <a href="#contato" class="btn btn-primario nav-cta">Fale conosco</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <canvas id="axp-particulas"></canvas>
+  <div class="wrap hero-conteudo">
+    <img src="imgs/aldeiaxp-logo-escura.png" alt="Aldeia XP" style="height:110px;display:block;margin:0 auto 24px;position:relative;z-index:2">
+    <span class="eyebrow">Comunicação · Audiovisual · Proteção Cultural Indígena</span>
+    <h1>Contar a história indígena com a <em>voz de quem a vive</em></h1>
+    <p class="sub">A Aldeia XP produz comunicação e audiovisual — rádio, TV, jornalismo, artes e registro de patrimônio — e presta apoio institucional e de planejamento a povos indígenas, protegendo propriedade intelectual, conhecimentos tradicionais e o direito de existir frente à crise climática e à apropriação cultural.</p>
+    <div class="hero-cta">
+      <a href="#atuacao" class="btn btn-primario">Conhecer nossa atuação</a>
+      <a href="#contato" class="btn btn-ghost">Propor uma parceria ↓</a>
+    </div>
+    <div class="hero-kpis">
+      <div class="hero-kpi"><div class="num">231-232</div><div class="lbl">Artigos constitucionais que defendemos</div></div>
+      <div class="hero-kpi"><div class="num">7+</div><div class="lbl">Frentes de atuação integradas</div></div>
+      <div class="hero-kpi"><div class="num">100%</div><div class="lbl">Narrativa produzida por vozes indígenas</div></div>
+      <div class="hero-kpi"><div class="num">Clima</div><div class="lbl">e cultura, uma só linha de frente</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre" style="position:relative">
+  <svg class="axp-marca-dagua" viewBox="0 0 200 200" aria-hidden="true"><use href="#axp-grafismo"/></svg>
+  <div class="wrap">
+    <div class="sobre-grid">
+      <div class="reveal-l">
+        <span class="eyebrow">Quem somos</span>
+        <h2>Comunicação que <em>nasce</em> dentro da aldeia, não sobre ela</h2>
+        <p style="color:var(--cinza);margin-top:16px">A <b>Aldeia XP</b> é uma organização de comunicação e audiovisual dedicada a produzir, formar e assessorar povos indígenas em todas as frentes da comunicação — rádio, televisão, jornalismo, artes e registro de patrimônio cultural e histórico — sempre a partir da autoria e da voz das próprias comunidades.</p>
+        <p style="color:var(--cinza);margin-top:12px">Além da produção, oferecemos apoio institucional e de planejamento estratégico às organizações indígenas, com foco especial na proteção da propriedade intelectual e dos conhecimentos tradicionais diante de dois riscos que se retroalimentam: a crise climática, que ameaça o território e o modo de vida, e a apropriação cultural, que esvazia o sentido e o valor econômico do que é genuinamente indígena.</p>
+      </div>
+      <div class="reveal-r sobre-arte">
+        <div class="sobre-disc">
+          <span class="disc-ping p1"></span><span class="disc-ping p2"></span><span class="disc-ping p3"></span>
+          <span class="disc-orbit o1"></span><span class="disc-orbit o2"></span><span class="disc-orbit o3"></span><span class="disc-orbit o4"></span>
+          <svg viewBox="0 0 200 200" style="width:250px;height:250px;position:relative;z-index:2">
+            <use href="#axp-grafismo" style="color:var(--vermelho)" class="disc-anel-svg"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AREAS DE ATUACAO -->
+<section id="atuacao" class="tex-fundo-claro" style="position:relative">
+  <svg class="axp-orn axp-orn-tl" viewBox="0 0 200 200" aria-hidden="true"><use href="#axp-grafismo"/></svg>
+  <svg class="axp-orn axp-orn-br" viewBox="0 0 200 200" aria-hidden="true"><use href="#axp-grafismo"/></svg>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">O que fazemos</span>
+      <h2>Sete frentes, <em>uma só</em> missão</h2>
+      <p>Comunicação, cultura e proteção jurídica trabalhando juntas — nenhuma delas sozinha resolve o desafio indígena de hoje.</p>
+    </div>
+    <div class="at-grid">
+      <div class="at-card reveal tilt"><div class="at-ic">📻</div><h3>Rádio</h3><p>Produção de conteúdo radiofônico em português e línguas originárias, levando informação e cultura às aldeias e às cidades.</p></div>
+      <div class="at-card reveal tilt"><div class="at-ic">📺</div><h3>Televisão</h3><p>Documentários e programas que apresentam o Brasil indígena real, longe do estereótipo e da narrativa de terceiros.</p></div>
+      <div class="at-card reveal tilt"><div class="at-ic">📰</div><h3>Jornalismo</h3><p>Cobertura própria de pautas indígenas — território, saúde, clima e direitos — com rigor e protagonismo das fontes.</p></div>
+      <div class="at-card reveal tilt"><div class="at-ic">🎨</div><h3>Artes e Cultura</h3><p>Apoio à produção artística indígena contemporânea, sem descolar da tradição que a origina.</p></div>
+      <div class="at-card reveal tilt"><div class="at-ic">🏺</div><h3>Registro de Patrimônio</h3><p>Documentação e registro de patrimônio cultural e histórico material e imaterial dos povos atendidos.</p></div>
+      <div class="at-card reveal tilt"><div class="at-ic">🏛️</div><h3>Apoio Institucional</h3><p>Planejamento estratégico, governança e assessoria para associações, cooperativas e fóruns indígenas.</p></div>
+      <div class="at-card reveal tilt"><div class="at-ic">⚖️</div><h3>Propriedade Intelectual</h3><p>Proteção jurídica de conhecimentos tradicionais, marcas coletivas, indicações geográficas e patrimônio genético associado.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAIXA 3D DIVISORA -->
+<div class="axp-faixa3d-wrap"><canvas id="axp-faixa3d"></canvas></div>
+
+<!-- NOSSA CAUSA -->
+<section id="causa" class="sec-escura" style="position:relative">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" style="color:var(--verde-claro)">Por que isso importa agora</span>
+      <h2 style="color:#fff">Duas crises, <em style="color:var(--verde-claro)">uma só linha</em> de frente</h2>
+      <p style="color:rgba(255,255,255,.75)">Crise climática e apropriação cultural não são temas separados — as duas ameaçam a mesma coisa: a relação do povo indígena com seu território, seu bioma e sua própria narrativa.</p>
+    </div>
+    <div class="causa-grid">
+      <div class="causa-card reveal">
+        <div class="causa-ic">🌎</div>
+        <h3>Crise climática</h3>
+        <p>O desequilíbrio climático atinge primeiro e com mais força quem depende diretamente do território e do bioma para viver — o que exige que a voz indígena esteja na linha de frente das decisões, não como pauta, mas como autoridade.</p>
+      </div>
+      <div class="causa-card reveal" style="animation-delay:.1s">
+        <div class="causa-ic">🛡️</div>
+        <h3>Apropriação cultural</h3>
+        <p>Grafismos, cantos, saberes e imagens indígenas seguem sendo usados por terceiros sem consentimento nem retorno às comunidades de origem — um problema de propriedade intelectual que também é um problema de identidade.</p>
+      </div>
+      <div class="causa-card reveal" style="animation-delay:.2s">
+        <div class="causa-ic">🌱</div>
+        <h3>Relação com a natureza</h3>
+        <p>Defendemos que a proteção ambiental e a proteção cultural indígena são a mesma pauta vista por dois ângulos — e é assim que atuamos, de forma integrada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEGISLACAO -->
+<section id="legislacao" style="position:relative">
+  <svg class="axp-orn axp-orn-tl" viewBox="0 0 200 200" aria-hidden="true"><use href="#axp-grafismo"/></svg>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Base normativa</span>
+      <h2>A legislação que <em>sustenta</em> nossa atuação</h2>
+      <p>Direitos constitucionais, clima, saúde indígena e patrimônio cultural — organizados para consulta rápida por lideranças, gestores e parceiros.</p>
+    </div>
+
+    <h3 class="leg-categoria">Direitos Constitucionais e Fundamentais</h3>
+    <div class="leg-grid">
+      <a class="leg-card reveal tilt" href="https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm" target="_blank" rel="noopener">
+        <span class="leg-selo">Constituição Federal</span>
+        <h4>Arts. 231 e 232 — Capítulo "Dos Índios"</h4>
+        <p>Reconhece a organização social, costumes, línguas, crenças e tradições, e os direitos originários sobre as terras que tradicionalmente ocupam.</p>
+        <span class="leg-link">Ler no Planalto ↗</span>
+      </a>
+      <a class="leg-card reveal tilt" href="https://www.planalto.gov.br/ccivil_03/decreto/d5051.htm" target="_blank" rel="noopener">
+        <span class="leg-selo">Decreto 5.051/2004</span>
+        <h4>Convenção 169 da OIT</h4>
+        <p>Ratificada pelo Brasil em 2003, reafirma internacionalmente os direitos sociais e territoriais dos povos indígenas e tribais.</p>
+        <span class="leg-link">Ler no Planalto ↗</span>
+      </a>
+      <a class="leg-card reveal tilt" href="https://www.planalto.gov.br/ccivil_03/leis/l6001.htm" target="_blank" rel="noopener">
+        <span class="leg-selo">Lei 6.001/1973</span>
+        <h4>Estatuto do Índio</h4>
+        <p>Regula a situação jurídica dos indígenas e comunidades indígenas, incluindo a tipificação de crimes contra a cultura indígena.</p>
+        <span class="leg-link">Ler no Planalto ↗</span>
+      </a>
+    </div>
+
+    <h3 class="leg-categoria">Clima, Território e Meio Ambiente</h3>
+    <div class="leg-grid">
+      <a class="leg-card reveal tilt" href="https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2009/lei/l12187.htm" target="_blank" rel="noopener">
+        <span class="leg-selo">Lei 12.187/2009</span>
+        <h4>Política Nacional sobre Mudança do Clima</h4>
+        <p>Estabelece os princípios, objetivos e instrumentos nacionais para o enfrentamento da mudança climática.</p>
+        <span class="leg-link">Ler no Planalto ↗</span>
+      </a>
+      <a class="leg-card reveal tilt" href="https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/decreto/d7747.htm" target="_blank" rel="noopener">
+        <span class="leg-selo">Decreto 7.747/2012</span>
+        <h4>PNGATI</h4>
+        <p>Política Nacional de Gestão Territorial e Ambiental de Terras Indígenas — protagonismo indígena na gestão do próprio território.</p>
+        <span class="leg-link">Ler no Planalto ↗</span>
+      </a>
+      <a class="leg-card reveal tilt" href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/decreto/d9073.htm" target="_blank" rel="noopener">
+        <span class="leg-selo">Decreto 9.073/2017</span>
+        <h4>Acordo de Paris</h4>
+        <p>Promulga o compromisso brasileiro de redução de emissões — base para a participação indígena em mecanismos como o REDD+.</p>
+        <span class="leg-link">Ler no Planalto ↗</span>
+      </a>
+    </div>
+
+    <h3 class="leg-categoria">Saúde Indígena</h3>
+    <div class="leg-grid">
+      <a class="leg-card reveal tilt" href="https://www.planalto.gov.br/ccivil_03/leis/l9836.htm" target="_blank" rel="noopener">
+        <span class="leg-selo">Lei 9.836/1999</span>
+        <h4>Lei Arouca — Subsistema de Saúde Indígena</h4>
+        <p>Institui o SASI-SUS, com Distritos Sanitários Especiais Indígenas e atenção diferenciada e culturalmente adequada.</p>
+        <span class="leg-link">Ler no Planalto ↗</span>
+      </a>
+      <a class="leg-card reveal tilt" href="https://www.planalto.gov.br/ccivil_03/_ato2020-2022/2020/lei/l14021.htm" target="_blank" rel="noopener">
+        <span class="leg-selo">Lei 14.021/2020</span>
+        <h4>Proteção social em territórios indígenas</h4>
+        <p>Medidas emergenciais de proteção social para prevenção do contágio e disseminação de doenças em territórios indígenas.</p>
+        <span class="leg-link">Ler no Planalto ↗</span>
+      </a>
+      <div class="leg-card reveal tilt" style="cursor:default">
+        <span class="leg-selo">Portaria GM/MS nº 10.778</span>
+        <h4>Programa Nacional de Saneamento Indígena</h4>
+        <p>Metas de longo prazo para universalizar acesso à água potável e esgotamento sanitário em aldeias.</p>
+      </div>
+    </div>
+
+    <h3 class="leg-categoria">Propriedade Intelectual e Patrimônio Cultural</h3>
+    <div class="leg-grid">
+      <a class="leg-card reveal tilt" href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13123.htm" target="_blank" rel="noopener">
+        <span class="leg-selo">Lei 13.123/2015</span>
+        <h4>Marco Legal da Biodiversidade</h4>
+        <p>Regula o acesso ao patrimônio genético e ao conhecimento tradicional associado, com repartição de benefícios às comunidades.</p>
+        <span class="leg-link">Ler no Planalto ↗</span>
+      </a>
+      <a class="leg-card reveal tilt" href="https://www.planalto.gov.br/ccivil_03/leis/l9610.htm" target="_blank" rel="noopener">
+        <span class="leg-selo">Lei 9.610/1998</span>
+        <h4>Lei de Direitos Autorais</h4>
+        <p>Base legal para a proteção de obras audiovisuais, fotográficas e artísticas produzidas pela e sobre a Aldeia XP.</p>
+        <span class="leg-link">Ler no Planalto ↗</span>
+      </a>
+      <div class="leg-card reveal tilt" style="cursor:default">
+        <span class="leg-selo">Decreto-Lei 25/1937</span>
+        <h4>Tombamento de Patrimônio</h4>
+        <p>Organiza a proteção do patrimônio histórico e artístico nacional — base para o registro de patrimônio que realizamos junto às comunidades.</p>
+      </div>
+    </div>
+
+    <h3 class="leg-categoria">Proteção e Segurança (atualizações 2026)</h3>
+    <div class="leg-grid">
+      <div class="leg-card reveal tilt" style="cursor:default">
+        <span class="leg-selo">Lei 15.382/2026</span>
+        <h4>Dia Nacional de Combate à Violência contra Mulheres e Meninas Indígenas</h4>
+        <p>Institui 5 de setembro como data nacional, com articulação interministerial de proteção.</p>
+      </div>
+      <div class="leg-card reveal tilt" style="cursor:default">
+        <span class="leg-selo">Lei 15.383/2026</span>
+        <h4>Alteração à Lei Maria da Penha</h4>
+        <p>Inclui monitoramento eletrônico de agressores como medida protetiva autônoma, ampliando o alcance em regiões remotas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOTICIAS -->
+<section id="noticias" class="tex-fundo-claro">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Comunicação própria</span>
+      <h2>Últimas <em>notícias</em></h2>
+    </div>
+    <div class="news-grid">
+      <a href="#" class="news-card reveal">
+        <div class="news-tag">Institucional</div>
+        <h4>Aldeia XP lança frente de assessoria em propriedade intelectual para associações indígenas</h4>
+        <p>Novo núcleo vai apoiar o registro de marcas coletivas e a proteção de conhecimentos tradicionais.</p>
+        <span class="news-more">Ler notícia completa →</span>
+      </a>
+      <a href="#" class="news-card reveal">
+        <div class="news-tag">Clima</div>
+        <h4>Lideranças indígenas debatem acesso a financiamento climático em oficina da Aldeia XP</h4>
+        <p>Encontro discutiu REDD+, PNGATI e o Artigo 6 do Acordo de Paris sob a ótica dos territórios indígenas.</p>
+        <span class="news-more">Ler notícia completa →</span>
+      </a>
+      <a href="#" class="news-card reveal">
+        <div class="news-tag">Audiovisual</div>
+        <h4>Documentário produzido pela Aldeia XP registra patrimônio cultural imaterial de aldeia parceira</h4>
+        <p>Produção 100% indígena documenta rituais, cantos e saberes tradicionais para preservação de longo prazo.</p>
+        <span class="news-more">Ler notícia completa →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOTOS E VIDEOS -->
+<section id="midia" class="sec-escura">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" style="color:var(--verde-claro)">Acervo</span>
+      <h2 style="color:#fff">Fotos e <em style="color:var(--verde-claro)">vídeos</em></h2>
+      <p style="color:rgba(255,255,255,.7)">Registro visual produzido em campo, pelas próprias comunidades parceiras.</p>
+    </div>
+    <div class="midia-grid">
+      <div class="midia-item reveal tilt"><div class="midia-ph">📷</div><span>Cobertura fotográfica de campo</span></div>
+      <div class="midia-item reveal tilt"><div class="midia-ph">🎬</div><span>Documentários e mini-séries</span></div>
+      <div class="midia-item reveal tilt"><div class="midia-ph">🎙️</div><span>Podcasts e programas de rádio</span></div>
+      <div class="midia-item reveal tilt"><div class="midia-ph">📷</div><span>Registro de rituais e cerimônias</span></div>
+      <div class="midia-item reveal tilt"><div class="midia-ph">🎬</div><span>Vídeos institucionais</span></div>
+      <div class="midia-item reveal tilt"><div class="midia-ph">🎙️</div><span>Entrevistas com lideranças</span></div>
+    </div>
+    <p style="text-align:center;color:rgba(255,255,255,.5);margin-top:30px;font-size:.85rem">Acervo em construção — novo material publicado regularmente.</p>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="contato" class="cta-final">
+  <div class="wrap" style="text-align:center; position:relative; z-index:2">
+    <span class="eyebrow" style="color:var(--verde-claro)">Vamos trabalhar juntos</span>
+    <h2 style="color:#fff; margin-top:10px">Sua comunidade também pode <em style="color:var(--verde-claro)">contar sua história</em></h2>
+    <p style="color:rgba(255,255,255,.8); max-width:600px; margin:14px auto 30px">Organizações, associações e lideranças indígenas podem buscar a Aldeia XP para produção de conteúdo, apoio institucional ou proteção de propriedade intelectual.</p>
+    <div class="hero-cta">
+      <a href="https://wa.me/5567000000000?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Aldeia%20XP." target="_blank" class="btn btn-primario">💬 Falar pelo WhatsApp</a>
+      <a href="mailto:contato@aldeiaxp.org.br" class="btn btn-ghost">✉ Enviar e-mail</a>
+    </div>
+  </div>
+</section>
+
+<!-- RODAPE -->
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <img src="imgs/aldeiaxp-logo-escura.png" alt="Aldeia XP" style="height:44px;margin-bottom:14px">
+      <p style="color:rgba(255,255,255,.6); font-size:.88rem; max-width:320px">Comunicação, audiovisual e apoio institucional a povos indígenas — proteção de propriedade intelectual, conhecimentos tradicionais e enfrentamento da crise climática e da apropriação cultural.</p>
+    </div>
+    <div>
+      <h4>Navegação</h4>
+      <a href="#sobre">Quem Somos</a><a href="#atuacao">Atuação</a><a href="#causa">Nossa Causa</a><a href="#legislacao">Legislação</a><a href="#noticias">Notícias</a>
+    </div>
+    <div>
+      <h4>Institucional</h4>
+      <a href="#">FUNAI</a>
+      <a href="#">Ministério dos Povos Indígenas</a>
+      <a href="#">Conselho Nacional de Saúde</a>
+    </div>
+    <div>
+      <h4>Contato</h4>
+      <a href="mailto:contato@aldeiaxp.org.br">contato@aldeiaxp.org.br</a>
+      <a href="https://wa.me/5567000000000" target="_blank">WhatsApp</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    Aldeia XP · Comunicação, Audiovisual e Proteção Cultural Indígena
+    <br><span style="opacity:.6">Este projeto é protegido pela Lei nº 9.610/1998 (Lei de Direitos Autorais).</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduzMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var telaEstreita = matchMedia('(max-width:640px)').matches;
+
+  // ===== NAV: scroll + burger mobile =====
+  var nav = document.getElementById('nav');
+  var burger = document.getElementById('burger');
+  var links = document.getElementById('navlinks');
+  window.addEventListener('scroll', function(){
+    if (window.scrollY > 40) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+  });
+  if (burger) burger.addEventListener('click', function(){ links.classList.toggle('open'); burger.classList.toggle('open'); });
+  document.querySelectorAll('#navlinks a').forEach(function(a){
+    a.addEventListener('click', function(){ links.classList.remove('open'); burger.classList.remove('open'); });
+  });
+
+  // ===== REVEAL ao rolar =====
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:.12});
+    document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(function(el){ io.observe(el); });
+    setTimeout(function(){
+      document.querySelectorAll('.reveal:not(.in),.reveal-l:not(.in),.reveal-r:not(.in)').forEach(function(el){
+        el.classList.add('in');
+      });
+    }, 3500);
+  } else {
+    document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(function(el){ el.classList.add('in'); });
+  }
+
+  // ===== TILT nos cards (so com mouse de verdade) =====
+  if (matchMedia('(hover:hover) and (pointer:fine)').matches){
+    document.querySelectorAll('.tilt').forEach(function(card){
+      card.addEventListener('mousemove', function(e){
+        var r = card.getBoundingClientRect();
+        var cx = ((e.clientX - r.left)/r.width - .5) * 8;
+        var cy = ((e.clientY - r.top)/r.height - .5) * -8;
+        card.style.transform = 'translateY(-4px) rotateX('+cy+'deg) rotateY('+cx+'deg)';
+      });
+      card.addEventListener('mouseleave', function(){ card.style.transform = ''; });
+    });
+  }
+
+  // ===== PARTICULAS 3D DO HERO =====
+  if (window.THREE){
+    try{
+      var canvasHero = document.getElementById('axp-particulas');
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(60, canvasHero.clientWidth/canvasHero.clientHeight, .1, 1000);
+      camera.position.z = 60;
+      var renderer = new THREE.WebGLRenderer({canvas:canvasHero, alpha:true, antialias:!telaEstreita});
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, telaEstreita?1.5:2));
+      function ajustarTamanhoHero(){
+        var w = canvasHero.clientWidth, h = canvasHero.clientHeight;
+        renderer.setSize(w, h, false);
+        camera.aspect = w/h; camera.updateProjectionMatrix();
+      }
+      ajustarTamanhoHero();
+      window.addEventListener('resize', ajustarTamanhoHero);
+
+      var cores = [0xD0202E, 0x1B7A3D, 0x3FAE72, 0x8C1620];
+      var totalContas = telaEstreita ? 22 : 46;
+      var grupo = new THREE.Group();
+      for (var i=0;i<totalContas;i++){
+        var fase = i/totalContas;
+        var y = 1 - (fase*2);
+        var raio = Math.sqrt(1-y*y);
+        var theta = fase * Math.PI * 2 * 5;
+        var x = Math.cos(theta)*raio, z = Math.sin(theta)*raio;
+        var geo = new THREE.SphereGeometry(.9 + Math.random()*.6, 10, 10);
+        var mat = new THREE.MeshStandardMaterial({color:cores[i%cores.length], emissive:cores[i%cores.length], emissiveIntensity:.35, roughness:.4});
+        var esfera = new THREE.Mesh(geo, mat);
+        esfera.position.set(x*30, y*22, z*30);
+        grupo.add(esfera);
+      }
+      scene.add(grupo);
+      scene.add(new THREE.AmbientLight(0xffffff, .7));
+      var luz = new THREE.DirectionalLight(0xffffff, .9); luz.position.set(4,8,10); scene.add(luz);
+
+      var visivel = true;
+      if ('IntersectionObserver' in window){
+        new IntersectionObserver(function(entries){ visivel = entries[0].isIntersecting; }, {threshold:0}).observe(canvasHero);
+      }
+      function animarHero(){
+        requestAnimationFrame(animarHero);
+        if (visivel){
+          if (!reduzMovimento) grupo.rotation.y += .0016;
+          renderer.render(scene, camera);
+        }
+      }
+      animarHero();
+    }catch(e){}
+
+    // ===== FAIXA 3D DIVISORIA (octaedros) =====
+    try{
+      var canvasFaixa = document.getElementById('axp-faixa3d');
+      var scene2 = new THREE.Scene();
+      var camera2 = new THREE.PerspectiveCamera(50, canvasFaixa.clientWidth/canvasFaixa.clientHeight, .1, 1000);
+      camera2.position.z = 40;
+      var renderer2 = new THREE.WebGLRenderer({canvas:canvasFaixa, alpha:true, antialias:!telaEstreita});
+      renderer2.setPixelRatio(Math.min(window.devicePixelRatio, telaEstreita?1.5:2));
+      function ajustarFaixa(){
+        var w = canvasFaixa.clientWidth, h = canvasFaixa.clientHeight;
+        renderer2.setSize(w,h,false); camera2.aspect = w/h; camera2.updateProjectionMatrix();
+      }
+      ajustarFaixa();
+      window.addEventListener('resize', ajustarFaixa);
+      var totalOcta = telaEstreita ? 10 : 22;
+      var octs = [];
+      var coresFaixa = [0xD0202E, 0x1B7A3D, 0x3FAE72];
+      for (var j=0;j<totalOcta;j++){
+        var geoO = new THREE.OctahedronGeometry(1.3, 0);
+        var matO = new THREE.MeshStandardMaterial({color:coresFaixa[j%coresFaixa.length], roughness:.35, metalness:.15});
+        var octa = new THREE.Mesh(geoO, matO);
+        octa.position.x = (j - (totalOcta-1)/2) * (telaEstreita?4.2:3.4);
+        octa.position.y = Math.sin(j*.7)*2;
+        scene2.add(octa); octs.push(octa);
+      }
+      scene2.add(new THREE.AmbientLight(0xffffff,.75));
+      var luz2 = new THREE.DirectionalLight(0xffffff,.85); luz2.position.set(3,6,8); scene2.add(luz2);
+      var faixaVisivel = true;
+      if ('IntersectionObserver' in window){
+        new IntersectionObserver(function(entries){ faixaVisivel = entries[0].isIntersecting; },{threshold:0}).observe(canvasFaixa);
+      }
+      function animarFaixa(){
+        requestAnimationFrame(animarFaixa);
+        if (faixaVisivel){
+          if (!reduzMovimento) octs.forEach(function(o){ o.rotation.x += .006; o.rotation.y += .008; });
+          renderer2.render(scene2, camera2);
+        }
+      }
+      animarFaixa();
+    }catch(e){}
+  }
+})();
+</script>
+
+</body>
+</html>
