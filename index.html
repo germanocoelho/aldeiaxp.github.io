@@ -427,7 +427,7 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
 
 <!-- AREAS DE ATUACAO -->
 <section id="atuacao" class="tex-fundo-claro" style="position:relative; overflow:hidden">
-  <div class="axp-vento claro" data-densidade="5" aria-hidden="true"></div>
+  <div class="axp-vento claro" data-densidade="14" aria-hidden="true"></div>
   <svg class="axp-orn axp-orn-tl" viewBox="0 0 200 200" aria-hidden="true"><use href="#axp-grafismo"/></svg>
   <svg class="axp-orn axp-orn-br" viewBox="0 0 200 200" aria-hidden="true"><use href="#axp-grafismo"/></svg>
   <div class="wrap" style="position:relative;z-index:1">
@@ -651,7 +651,7 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
 <!-- FOTOS E VIDEOS -->
 <section id="midia" class="sec-escura" style="position:relative; overflow:hidden">
   <div class="axp-estrelas" id="axp-estrelas-midia" aria-hidden="true"></div>
-  <div class="axp-vento" data-densidade="5" aria-hidden="true"></div>
+  <div class="axp-vento" data-densidade="18" aria-hidden="true"></div>
   <div class="wrap" style="position:relative;z-index:1">
     <div class="axp-sol-wrap reveal" aria-hidden="true">
       <svg class="axp-sol-svg" viewBox="0 0 240 240"><use href="#axp-sol-ancestral"/></svg>
@@ -865,7 +865,7 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
       var tipo = Math.random() < 0.32 ? 'pena' : 'folha';
       var svg = document.createElementNS(svgNS, 'svg');
       svg.setAttribute('viewBox', tipo === 'pena' ? '0 0 40 140' : '0 0 60 100');
-      var tam = tipo === 'pena' ? (13 + Math.random()*9) : (15 + Math.random()*11);
+      var tam = tipo === 'pena' ? (16 + Math.random()*12) : (19 + Math.random()*14);
       var altura = tipo === 'pena' ? tam*3.3 : tam*1.55;
       svg.setAttribute('width', tam);
       svg.setAttribute('height', altura);
@@ -877,16 +877,16 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
       use.setAttribute('href', alvo);
       svg.appendChild(use);
       svg.style.left = (Math.random()*100) + '%';
-      var duracaoCair = 12 + Math.random()*12;
+      var duracaoCair = 9 + Math.random()*10;
       var duracaoBalanco = 3 + Math.random()*2.6;
       var duracaoGiro = 6 + Math.random()*9;
       svg.style.animationDuration = duracaoCair+'s, '+duracaoBalanco+'s, '+duracaoGiro+'s';
       svg.style.animationDelay = (Math.random()*duracaoCair*-1)+'s, '+(Math.random()*duracaoBalanco*-1)+'s, '+(Math.random()*duracaoGiro*-1)+'s';
-      svg.style.opacity = (0.32 + Math.random()*0.4).toFixed(2);
+      svg.style.opacity = (0.5 + Math.random()*0.42).toFixed(2);
       container.appendChild(svg);
     }
     document.querySelectorAll('.axp-vento').forEach(function(ventoEl){
-      var densidade = parseInt(ventoEl.getAttribute('data-densidade'), 10) || (telaEstreita ? 7 : 14);
+      var densidade = parseInt(ventoEl.getAttribute('data-densidade'), 10) || (telaEstreita ? 16 : 34);
       for (var fi=0; fi<densidade; fi++){ criarParticulaVento(ventoEl, coresCiclo); }
     });
   }catch(e){}
