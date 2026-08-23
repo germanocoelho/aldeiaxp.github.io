@@ -151,6 +151,36 @@ img{max-width:100%}
 .time-card h3{font-size:.94rem; margin-bottom:6px; line-height:1.35}
 .time-cargo{font-size:.76rem; color:var(--verde); font-weight:700; text-transform:uppercase; letter-spacing:.03em}
 
+/* ===== TIME COM CURRICULO ===== */
+.time-grid-cv{grid-template-columns:repeat(2,1fr); align-items:start}
+@media(max-width:900px){.time-grid-cv{grid-template-columns:1fr}}
+.time-card-cv{text-align:left; padding:30px 26px}
+.time-foto-btn{display:block; width:64px; height:64px; border-radius:50%; overflow:hidden; border:none; padding:0; margin:0 0 14px; cursor:pointer; background:none; box-shadow:0 0 0 3px rgba(208,32,46,.12)}
+.time-foto-btn img{width:100%; height:100%; object-fit:cover; display:block; transition:.3s}
+.time-foto-btn:hover img{transform:scale(1.08)}
+.time-nome-btn{display:block; background:none; border:none; padding:0; margin:0 0 4px; font-family:'Fraunces',serif; font-size:1.05rem; font-weight:700; color:var(--tinta); text-align:left; cursor:pointer}
+.time-nome-btn:hover{color:var(--vermelho)}
+.time-card-cv .time-cargo{display:block; margin-bottom:14px}
+.time-cv{color:var(--cinza); font-size:.88rem; line-height:1.7; margin-bottom:14px}
+.time-lattes{display:inline-block; font-size:.8rem; font-weight:700; color:var(--verde); border-bottom:1.5px solid rgba(27,122,61,.35)}
+.time-lattes:hover{border-color:var(--verde)}
+.time-equipe-resumo{max-width:900px; margin:44px auto 0; padding:26px 28px; background:var(--branco); border:1px solid var(--linha); border-radius:var(--r)}
+.time-equipe-resumo h4{font-family:'Fraunces',serif; font-size:1rem; margin-bottom:10px; color:var(--vermelho)}
+.time-equipe-resumo p{color:var(--cinza); font-size:.88rem; line-height:1.7}
+
+/* Lightbox do time — mesma tecnica/botoes do lightbox de fotos do CMDDI */
+.lightbox-time{display:none; position:fixed; inset:0; background:rgba(0,0,0,.92); z-index:9999; align-items:center; justify-content:center; flex-direction:column}
+.lightbox-time.aberto{display:flex}
+.lightbox-time img{max-width:90vw; max-height:78vh; object-fit:contain; border-radius:6px}
+.lightbox-time-close{position:absolute; top:1rem; right:1.2rem; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer; opacity:.9}
+.lightbox-time-close:hover{opacity:1}
+.lightbox-time-nav{position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,.15); border:none; color:#fff; font-size:2rem; cursor:pointer; padding:.5rem .9rem; border-radius:50%; transition:.2s}
+.lightbox-time-nav:hover{background:rgba(255,255,255,.28)}
+.lightbox-time-prev{left:1rem}
+.lightbox-time-next{right:1rem}
+.lightbox-time-leg{color:#fff; margin-top:1rem; font-size:.95rem; font-weight:700; text-align:center; max-width:600px; padding:0 1rem}
+.lightbox-time-count{color:rgba(255,255,255,.7); font-size:.75rem; margin-top:.35rem}
+
 /* ===== PORTFOLIO DE APOIO A INSTITUICOES ===== */
 .portfolio-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
 @media(max-width:900px){.portfolio-grid{grid-template-columns:1fr}}
@@ -455,30 +485,64 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
       <h2>Nosso <em>time</em></h2>
       <p>As pessoas por trás da Aldeia XP.</p>
     </div>
-    <div class="time-grid">
-      <div class="time-card reveal tilt">
-        <div class="time-avatar">GC</div>
-        <h3>Germano Coelho Ramos Rocha-Silva</h3>
-        <span class="time-cargo">Direção</span>
+    <div class="time-grid time-grid-cv">
+
+      <div class="time-card time-card-cv reveal tilt">
+        <button class="time-foto-btn" onclick="abrirLightboxTime(0)" title="Ver foto de Germano Coelho Ramos Rocha da Silva">
+          <img src="imgs/time-germano.jpg" alt="Germano Coelho Ramos Rocha da Silva">
+        </button>
+        <button class="time-nome-btn" onclick="abrirLightboxTime(0)">Germano Coelho Ramos Rocha da Silva</button>
+        <span class="time-cargo">Direção · Pesquisador e Consultor</span>
+        <p class="time-cv"><em>Pesquisador, consultor e profissional do Direito.</em> Graduado em Direito, com formação acadêmica e profissional voltada à pesquisa, inovação, propriedade intelectual, direitos humanos e direitos indígenas. É mestre em Propriedade Intelectual e Inovação e atualmente realiza doutorado em Recursos Naturais, com pesquisa relacionada à bioeconomia, patrimônio imaterial, propriedade intelectual e cultura Terena. Possui experiência em consultoria, pesquisa acadêmica, produção científica, projetos de extensão e participação em conselhos e instituições. Desenvolve estudos sobre povos originários, cultura, conhecimentos tradicionais, patrimônio indígena e comunidades indígenas de Mato Grosso do Sul, incluindo trabalhos relacionados à Aldeia Marçal de Souza.</p>
+        <a href="http://lattes.cnpq.br/2591855923125115" target="_blank" rel="noopener" class="time-lattes">Currículo Lattes ↗</a>
       </div>
-      <div class="time-card reveal tilt" style="animation-delay:.1s">
-        <div class="time-avatar">OS</div>
-        <h3>Oswaldo Ribeiro da Silva</h3>
-        <span class="time-cargo">Equipe Aldeia XP</span>
+
+      <div class="time-card time-card-cv reveal tilt" style="animation-delay:.1s">
+        <button class="time-foto-btn" onclick="abrirLightboxTime(1)" title="Ver foto de Lays Ramos Ribeiro">
+          <img src="imgs/time-lays.jpg" alt="Lays Ramos Ribeiro">
+        </button>
+        <button class="time-nome-btn" onclick="abrirLightboxTime(1)">Lays Ramos Ribeiro</button>
+        <span class="time-cargo">Realizadora Audiovisual</span>
+        <p class="time-cv">Realizadora audiovisual e estudante de Audiovisual, atualmente no 8º semestre, em fase de conclusão da graduação. Possui experiência em direção, produção e roteiro, desenvolvendo trabalhos documentais, poéticos e experimentais. Atua na construção de narrativas envolvendo memória, identidade, arquivo, poesia e relações sociais. É indígena Terena e pessoa com TEA, experiência que também atravessa sua produção audiovisual e sua relação com temas como identidade indígena, deficiência, acessibilidade e contexto urbano. Possui ainda experiência em projetos de extensão e produção de conteúdos para rádio e televisão.</p>
       </div>
-      <div class="time-card reveal tilt" style="animation-delay:.2s">
-        <div class="time-avatar">PR</div>
-        <h3>Pedro Henrique Ramos Ribeiro</h3>
-        <span class="time-cargo">Equipe Aldeia XP</span>
+
+      <div class="time-card time-card-cv reveal tilt" style="animation-delay:.2s">
+        <button class="time-foto-btn" onclick="abrirLightboxTime(2)" title="Ver foto de Oswaldo Ribeiro da Silva">
+          <img src="imgs/time-oswaldo.jpg" alt="Oswaldo Ribeiro da Silva">
+        </button>
+        <button class="time-nome-btn" onclick="abrirLightboxTime(2)">Oswaldo Ribeiro da Silva</button>
+        <span class="time-cargo">Jornalista e Pesquisador</span>
+        <p class="time-cv"><em>Jornalista, professor e pesquisador.</em> Graduado em Jornalismo, com especialização em Imagem e Som, mestrado em Ciência da Informação, doutorado em Educação, pós-doutorado em Comunicação e Informação e atualmente doutorando em Comunicação. Possui mais de três décadas de experiência em jornalismo, comunicação e produção audiovisual, atuando em roteiro, produção, direção, pesquisa, documentário, montagem e edição. Também possui ampla experiência acadêmica na orientação de trabalhos audiovisuais e documentários, além de pesquisas e produções relacionadas à comunicação, cultura e temáticas indígenas.</p>
+        <a href="http://lattes.cnpq.br/6235731106019004" target="_blank" rel="noopener" class="time-lattes">Currículo Lattes ↗</a>
       </div>
-      <div class="time-card reveal tilt" style="animation-delay:.3s">
-        <div class="time-avatar">LR</div>
-        <h3>Lays Ramos Ribeiro</h3>
-        <span class="time-cargo">Equipe Aldeia XP</span>
+
+      <div class="time-card time-card-cv reveal tilt" style="animation-delay:.3s">
+        <button class="time-foto-btn" onclick="abrirLightboxTime(3)" title="Ver foto de Pedro Henrique Ramos Ribeiro">
+          <img src="imgs/time-pedro.jpg" alt="Pedro Henrique Ramos Ribeiro">
+        </button>
+        <button class="time-nome-btn" onclick="abrirLightboxTime(3)">Pedro Henrique Ramos Ribeiro</button>
+        <span class="time-cargo">Jornalista e Audiovisual</span>
+        <p class="time-cv"><em>Jornalista e profissional do audiovisual.</em> Graduado em Jornalismo, possui experiência em assessoria de comunicação e imprensa, produção de comunicação institucional e criação de conteúdos audiovisuais para órgãos públicos, empresas e redes sociais. Atua em produção, direção de fotografia, captação de áudio e vídeo, operação de equipamentos, roteiro e montagem/edição. Possui experiência com vídeos institucionais, conteúdos para redes sociais, transmissões e produção audiovisual para diferentes plataformas. Trabalha com ferramentas como DaVinci Resolve, Adobe Premiere e CapCut. É indígena Terena em contexto urbano e também participa de produções audiovisuais relacionadas à temática indígena.</p>
       </div>
+
+    </div>
+
+    <div class="time-equipe-resumo reveal">
+      <h4>A equipe</h4>
+      <p>A equipe reúne diferentes formações e competências complementares nas áreas de Jornalismo, Comunicação, Audiovisual, Direito, Pesquisa e Produção Cultural. A experiência conjunta envolve roteiro, direção, produção, fotografia, captação de som e imagem, montagem, assessoria de comunicação, pesquisa acadêmica e consultoria especializada em temáticas indígenas, articulando formação acadêmica e experiência profissional com questões de memória, identidade, cultura, acessibilidade e povos indígenas em contexto urbano.</p>
     </div>
   </div>
 </section>
+
+<!-- LIGHTBOX DO TIME (mesmo padrao tecnico do CMDDI) -->
+<div id="lightbox-time" class="lightbox-time" onclick="fecharLightboxTime(event)">
+  <button onclick="fecharLightboxTime()" class="lightbox-time-close">✕</button>
+  <button onclick="event.stopPropagation();navLightboxTime(-1)" class="lightbox-time-nav lightbox-time-prev">‹</button>
+  <button onclick="event.stopPropagation();navLightboxTime(1)" class="lightbox-time-nav lightbox-time-next">›</button>
+  <img id="lbt-img" src="" alt="">
+  <div id="lbt-leg" class="lightbox-time-leg"></div>
+  <div id="lbt-count" class="lightbox-time-count"></div>
+</div>
 
 <!-- AREAS DE ATUACAO -->
 <section id="atuacao" class="tex-fundo-claro" style="position:relative; overflow:hidden">
@@ -1122,6 +1186,50 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
       animarFumaca();
     }
   }catch(e){}
+
+  // ============================================================
+  // LIGHTBOX DO TIME — mesma tecnica e botoes do lightbox do CMDDI
+  // ============================================================
+  window._timeFotos = [
+    {src:'imgs/time-germano.jpg', leg:'Germano Coelho Ramos Rocha da Silva — Direção · Pesquisador e Consultor'},
+    {src:'imgs/time-lays.jpg', leg:'Lays Ramos Ribeiro — Realizadora Audiovisual'},
+    {src:'imgs/time-oswaldo.jpg', leg:'Oswaldo Ribeiro da Silva — Jornalista e Pesquisador'},
+    {src:'imgs/time-pedro.jpg', leg:'Pedro Henrique Ramos Ribeiro — Jornalista e Audiovisual'}
+  ];
+  window._timeIdx = 0;
+  window.abrirLightboxTime = function(idx){
+    window._timeIdx = idx;
+    _renderLightboxTime();
+    var lb = document.getElementById('lightbox-time');
+    if (lb){ lb.classList.add('aberto'); document.body.style.overflow = 'hidden'; }
+  };
+  window.navLightboxTime = function(dir){
+    var total = window._timeFotos.length;
+    window._timeIdx = (window._timeIdx + dir + total) % total;
+    _renderLightboxTime();
+  };
+  window.fecharLightboxTime = function(e){
+    if (e && e.target !== document.getElementById('lightbox-time')) return;
+    var lb = document.getElementById('lightbox-time');
+    if (lb){ lb.classList.remove('aberto'); document.body.style.overflow = ''; }
+  };
+  function _renderLightboxTime(){
+    var item = window._timeFotos[window._timeIdx];
+    if (!item) return;
+    var img = document.getElementById('lbt-img');
+    var leg = document.getElementById('lbt-leg');
+    var cnt = document.getElementById('lbt-count');
+    if (img) img.src = item.src;
+    if (leg) leg.textContent = item.leg;
+    if (cnt) cnt.textContent = (window._timeIdx + 1) + ' / ' + window._timeFotos.length;
+  }
+  document.addEventListener('keydown', function(e){
+    var lb = document.getElementById('lightbox-time');
+    if (!lb || !lb.classList.contains('aberto')) return;
+    if (e.key === 'ArrowRight') navLightboxTime(1);
+    else if (e.key === 'ArrowLeft') navLightboxTime(-1);
+    else if (e.key === 'Escape') fecharLightboxTime();
+  });
 })();
 </script>
 
