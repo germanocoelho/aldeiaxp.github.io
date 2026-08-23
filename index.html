@@ -141,6 +141,26 @@ img{max-width:100%}
 .at-card h3{font-size:1.02rem; margin-bottom:6px}
 .at-card p{color:var(--cinza); font-size:.87rem}
 
+/* ===== TIME ===== */
+.time-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:22px}
+@media(max-width:900px){.time-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.time-grid{grid-template-columns:1fr}}
+.time-card{background:var(--branco); border-radius:var(--r); padding:28px 20px; border:1px solid var(--linha); text-align:center; transition:.3s}
+.time-card:hover{transform:translateY(-6px); box-shadow:0 20px 40px -20px rgba(208,32,46,.22)}
+.time-avatar{width:64px; height:64px; margin:0 auto 14px; border-radius:50%; display:grid; place-items:center; font-family:'Fraunces',serif; font-weight:700; font-size:1.1rem; color:#fff; background:linear-gradient(135deg,var(--vermelho),var(--verde))}
+.time-card h3{font-size:.94rem; margin-bottom:6px; line-height:1.35}
+.time-cargo{font-size:.76rem; color:var(--verde); font-weight:700; text-transform:uppercase; letter-spacing:.03em}
+
+/* ===== PORTFOLIO DE APOIO A INSTITUICOES ===== */
+.portfolio-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+@media(max-width:900px){.portfolio-grid{grid-template-columns:1fr}}
+.portfolio-card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.13); border-radius:var(--r); padding:26px 22px; transition:.3s}
+.portfolio-card:hover{background:rgba(255,255,255,.1); transform:translateY(-5px); border-color:rgba(63,174,114,.4)}
+.portfolio-selo{display:inline-block; font-size:.68rem; font-weight:700; letter-spacing:.04em; color:var(--carvao); background:var(--verde-claro); padding:4px 11px; border-radius:100px; margin-bottom:12px}
+.portfolio-card h3{color:#fff; font-size:.96rem; margin-bottom:8px; line-height:1.3}
+.portfolio-card p{color:rgba(255,255,255,.7); font-size:.85rem; margin-bottom:14px}
+.portfolio-link{color:var(--verde-claro); font-size:.82rem; font-weight:700}
+
 /* ===== NOSSA CAUSA ===== */
 .sec-escura{background:radial-gradient(120% 130% at 50% -10%,var(--carvao-3),var(--carvao) 60%,#0A0C0E 100%); position:relative}
 .causa-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px}
@@ -359,8 +379,10 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
     </a>
     <nav class="nav-links" id="navlinks">
       <a href="#sobre">Quem Somos</a>
+      <a href="#time">Time</a>
       <a href="#atuacao">Atuação</a>
       <a href="#causa">Nossa Causa</a>
+      <a href="#portfolio">Portfólio</a>
       <a href="#legislacao">Legislação</a>
       <a href="#noticias">Notícias</a>
       <a href="#midia">Fotos e Vídeos</a>
@@ -421,6 +443,39 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
         <polyline class="axp-tec-linha axp-tec-2" points="0,45 40,75 80,15 120,75 160,15 200,75 240,15 280,75 320,15 360,75 400,15 440,75 480,15 520,75 560,15 600,75 640,15 680,75 720,15 760,75 800,15 840,45 900,45"/>
       </svg>
       <span class="axp-tec-legenda">Iconografia viva — o grafismo se desenha como se traçado à mão</span>
+    </div>
+  </div>
+</section>
+
+<!-- TIME -->
+<section id="time" class="tex-fundo-claro">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Quem conduz</span>
+      <h2>Nosso <em>time</em></h2>
+      <p>As pessoas por trás da Aldeia XP.</p>
+    </div>
+    <div class="time-grid">
+      <div class="time-card reveal tilt">
+        <div class="time-avatar">GC</div>
+        <h3>Germano Coelho Ramos Rocha-Silva</h3>
+        <span class="time-cargo">Direção</span>
+      </div>
+      <div class="time-card reveal tilt" style="animation-delay:.1s">
+        <div class="time-avatar">OS</div>
+        <h3>Oswaldo Ribeiro da Silva</h3>
+        <span class="time-cargo">Equipe Aldeia XP</span>
+      </div>
+      <div class="time-card reveal tilt" style="animation-delay:.2s">
+        <div class="time-avatar">PR</div>
+        <h3>Pedro Henrique Ramos Ribeiro</h3>
+        <span class="time-cargo">Equipe Aldeia XP</span>
+      </div>
+      <div class="time-card reveal tilt" style="animation-delay:.3s">
+        <div class="time-avatar">LR</div>
+        <h3>Lays Ramos Ribeiro</h3>
+        <span class="time-cargo">Equipe Aldeia XP</span>
+      </div>
     </div>
   </div>
 </section>
@@ -494,6 +549,50 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
         <div class="causa-ic">🌱</div>
         <h3>Relação com a natureza</h3>
         <p>Defendemos que a proteção ambiental e a proteção cultural indígena são a mesma pauta vista por dois ângulos — e é assim que atuamos, de forma integrada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO DE APOIO A INSTITUICOES INDIGENAS -->
+<section id="portfolio" class="sec-escura" style="position:relative; overflow:hidden">
+  <div class="axp-estrelas" id="axp-estrelas-portfolio" aria-hidden="true"></div>
+  <div class="wrap" style="position:relative;z-index:1">
+    <div class="sec-head">
+      <span class="eyebrow" style="color:var(--verde-claro)">Rede de atuação</span>
+      <h2 style="color:#fff">Portfólio de Apoio a <em style="color:var(--verde-claro)">Instituições Indígenas</em></h2>
+      <p style="color:rgba(255,255,255,.75)">A Aldeia XP articula comunicação, registro audiovisual e apoio institucional junto a organizações indígenas de Mato Grosso do Sul e do Brasil — cada parceria com sua própria frente de trabalho.</p>
+    </div>
+    <div class="portfolio-grid">
+      <div class="portfolio-card reveal tilt">
+        <span class="portfolio-selo">ICET</span>
+        <h3>Instituto Cacique Enir Terena</h3>
+        <p>Apoiamos a comunicação institucional e o registro audiovisual das ações do ICET voltadas à proteção do patrimônio cultural Terena e à defesa da propriedade intelectual indígena, dando visibilidade ao trabalho da instituição para além de seus próprios canais.</p>
+        <a href="https://institutocaciqueenirterena.github.io" target="_blank" rel="noopener" class="portfolio-link">Conhecer o ICET ↗</a>
+      </div>
+      <div class="portfolio-card reveal tilt" style="animation-delay:.1s">
+        <span class="portfolio-selo">CMDDI</span>
+        <h3>Conselho Municipal dos Direitos e Defesa dos Povos Indígenas</h3>
+        <p>Acompanhamos a atuação do CMDDI em Campo Grande, contribuindo com cobertura jornalística e produção de conteúdo sobre as deliberações do conselho e sua relação com as comunidades indígenas do município.</p>
+        <a href="https://cmddicg.com.br" target="_blank" rel="noopener" class="portfolio-link">Conhecer o CMDDI ↗</a>
+      </div>
+      <div class="portfolio-card reveal tilt" style="animation-delay:.2s">
+        <span class="portfolio-selo">COOPIMS</span>
+        <h3>Cooperativa Estadual Indígena de Mato Grosso do Sul</h3>
+        <p>Junto à COOPIMS, apoiamos a divulgação da produção das famílias cooperadas Terena, Kadiwéu e Guarani, valorizando a cadeia produtiva indígena por meio de registro fotográfico e narrativas em vídeo sobre o trabalho em sete municípios do Estado.</p>
+        <a href="https://www.coopims.com.br" target="_blank" rel="noopener" class="portfolio-link">Conhecer a COOPIMS ↗</a>
+      </div>
+      <div class="portfolio-card reveal tilt" style="animation-delay:.3s">
+        <span class="portfolio-selo">UNIPBRAS</span>
+        <h3>União Nacional dos Produtores e Agricultores Indígenas do Brasil</h3>
+        <p>Colaboramos na construção de uma comunicação de alcance nacional para a UNIPBRAS, dando visibilidade às lideranças fundadoras das catorze localidades reunidas pela organização em todo o território brasileiro.</p>
+        <span class="portfolio-link" style="opacity:.5;cursor:default">Site em breve</span>
+      </div>
+      <div class="portfolio-card reveal tilt" style="animation-delay:.4s">
+        <span class="portfolio-selo">FOCAMS</span>
+        <h3>Fórum dos Caciques de Mato Grosso do Sul</h3>
+        <p>No FOCAMS, atuamos no registro documental dos encontros de lideranças, produzindo material audiovisual que fortalece a memória institucional do fórum e amplia o alcance de suas pautas junto à sociedade.</p>
+        <a href="https://www.focams.com.br" target="_blank" rel="noopener" class="portfolio-link">Conhecer o FOCAMS ↗</a>
       </div>
     </div>
   </div>
