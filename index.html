@@ -96,8 +96,13 @@ img{max-width:100%}
 .nav.scrolled{background:rgba(24,27,31,.95); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); padding:10px 0; box-shadow:0 8px 30px -12px rgba(0,0,0,.5)}
 .nav-inner{display:flex; align-items:center; justify-content:space-between}
 .nav-brand-img{height:38px; display:block}
-.nav-links{display:flex; align-items:center; gap:24px}
-.nav-links a{color:rgba(255,255,255,.86); font-size:.9rem; font-weight:600; transition:.2s}
+.nav-links{display:flex; align-items:center; gap:18px}
+.nav-links a{color:rgba(255,255,255,.86); font-size:.86rem; font-weight:600; transition:.2s; white-space:nowrap}
+@media(max-width:1180px){
+  .nav-links{gap:13px}
+  .nav-links a{font-size:.78rem}
+  .nav-cta{padding:9px 16px !important; font-size:.78rem}
+}
 .nav-links a:hover{color:var(--verde-claro)}
 .nav-cta{padding:11px 22px !important}
 .burger{display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:6px; position:relative; z-index:120}
@@ -105,7 +110,7 @@ img{max-width:100%}
 .burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .burger.open span:nth-child(2){opacity:0}
 .burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-@media(max-width:920px){
+@media(max-width:1030px){
   .nav-links{position:fixed; top:0; right:-100%; width:78%; max-width:320px; height:100vh; background:var(--carvao); flex-direction:column; justify-content:center; align-items:flex-start; padding:40px; transition:.35s; gap:22px}
   .nav-links.open{right:0}
   .burger{display:flex}
@@ -150,6 +155,25 @@ img{max-width:100%}
 .time-avatar{width:64px; height:64px; margin:0 auto 14px; border-radius:50%; display:grid; place-items:center; font-family:'Fraunces',serif; font-weight:700; font-size:1.1rem; color:#fff; background:linear-gradient(135deg,var(--vermelho),var(--verde))}
 .time-card h3{font-size:.94rem; margin-bottom:6px; line-height:1.35}
 .time-cargo{font-size:.76rem; color:var(--verde); font-weight:700; text-transform:uppercase; letter-spacing:.03em}
+
+/* ===== NOSSA MARCA ===== */
+.marca-logo-wrap{display:flex; justify-content:center; margin:0 0 50px}
+.marca-logo-img{height:90px; width:auto; max-width:90%; filter:drop-shadow(0 8px 30px rgba(0,0,0,.4))}
+@media(max-width:640px){.marca-logo-img{height:64px}}
+.marca-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:20px}
+@media(max-width:900px){.marca-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.marca-grid{grid-template-columns:1fr}}
+.marca-card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.13); border-radius:var(--r); padding:26px 22px; transition:.3s}
+.marca-card:hover{background:rgba(255,255,255,.1); transform:translateY(-5px); border-color:rgba(63,174,114,.4)}
+.marca-card-full{grid-column:1 / -1}
+.marca-card h3{color:#fff; font-size:.98rem; margin-bottom:8px}
+.marca-card p{color:rgba(255,255,255,.7); font-size:.86rem; line-height:1.65}
+.marca-cor{display:block; width:34px; height:34px; border-radius:9px; margin-bottom:14px; font-size:1.2rem; line-height:34px; text-align:center}
+.marca-cor-vermelho{background:linear-gradient(135deg,var(--vermelho),var(--vermelho-esc))}
+.marca-cor-verde{background:linear-gradient(135deg,var(--verde-claro),var(--verde))}
+.marca-cor-triangulo{background:var(--carvao-3); color:var(--vermelho)}
+.marca-cor-padrao{background:var(--carvao-3); color:var(--verde-claro)}
+.marca-cor-dual{background:linear-gradient(90deg,var(--vermelho) 50%,var(--verde) 50%)}
 
 /* ===== TIME COM CURRICULO ===== */
 .time-grid-cv{grid-template-columns:repeat(2,1fr); align-items:start}
@@ -409,6 +433,7 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
     </a>
     <nav class="nav-links" id="navlinks">
       <a href="#sobre">Quem Somos</a>
+      <a href="#marca">Nossa Marca</a>
       <a href="#atuacao">Atuação</a>
       <a href="#causa">Nossa Causa</a>
       <a href="#portfolio">Portfólio</a>
@@ -473,6 +498,50 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
         <polyline class="axp-tec-linha axp-tec-2" points="0,45 40,75 80,15 120,75 160,15 200,75 240,15 280,75 320,15 360,75 400,15 440,75 480,15 520,75 560,15 600,75 640,15 680,75 720,15 760,75 800,15 840,45 900,45"/>
       </svg>
       <span class="axp-tec-legenda">Iconografia viva — o grafismo se desenha como se traçado à mão</span>
+    </div>
+  </div>
+</section>
+
+<!-- NOSSA MARCA -->
+<section id="marca" class="sec-escura" style="position:relative; overflow:hidden">
+  <div class="axp-estrelas" id="axp-estrelas-marca" aria-hidden="true"></div>
+  <div class="wrap" style="position:relative;z-index:1">
+    <div class="sec-head">
+      <span class="eyebrow" style="color:var(--verde-claro)">Identidade</span>
+      <h2 style="color:#fff">O significado da <em style="color:var(--verde-claro)">nossa marca</em></h2>
+      <p style="color:rgba(255,255,255,.75)">Cada cor e cada traço da logomarca Aldeia XP carrega um sentido — nada foi escolhido por acaso.</p>
+    </div>
+
+    <div class="marca-logo-wrap reveal">
+      <img src="imgs/aldeiaxp-logo-escura.png" alt="Logomarca Aldeia XP" class="marca-logo-img">
+    </div>
+
+    <div class="marca-grid">
+      <div class="marca-card reveal tilt">
+        <span class="marca-cor marca-cor-vermelho"></span>
+        <h3>Vermelho — urucum</h3>
+        <p>Representa vitalidade, tradição e força cultural indígena, com destaque especial para a nossa região de Mato Grosso do Sul. É um vermelho vivo, não terroso — escolhido de propósito para expressar energia e presença, sem se vincular diretamente a nenhum povo indígena específico, mas usado por nós em diálogo com essa herança.</p>
+      </div>
+      <div class="marca-card reveal tilt" style="animation-delay:.1s">
+        <span class="marca-cor marca-cor-verde"></span>
+        <h3>Verde — floresta</h3>
+        <p>Simboliza a floresta, a natureza e a proteção ambiental, reforçando nossa ligação com o território — exatamente onde queremos mostrar nosso expertise: na intersecção entre comunicação, cultura e meio ambiente.</p>
+      </div>
+      <div class="marca-card reveal tilt" style="animation-delay:.2s">
+        <span class="marca-cor marca-cor-triangulo">▲</span>
+        <h3>Símbolo triangular</h3>
+        <p>A forma triangular dividida remete a uma oca, à estrutura de uma aldeia — mas também sugere equilíbrio e a união de forças distintas em um mesmo propósito.</p>
+      </div>
+      <div class="marca-card reveal tilt" style="animation-delay:.3s">
+        <span class="marca-cor marca-cor-padrao">✳</span>
+        <h3>Padrões geométricos internos</h3>
+        <p>Os grafismos internos são inspirados em padrões indígenas, reforçando identidade cultural e autenticidade em cada aplicação da marca.</p>
+      </div>
+      <div class="marca-card reveal tilt marca-card-full" style="animation-delay:.4s">
+        <span class="marca-cor marca-cor-dual"></span>
+        <h3>A dualidade vermelho/verde</h3>
+        <p>As duas cores lado a lado representam a coexistência entre tradição (urucum) e território (floresta) — a mesma dualidade que orienta tudo o que fazemos: contar histórias sem perder de vista a terra de onde elas nascem.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -844,8 +913,8 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
     <h2 style="color:#fff; margin-top:10px">Sua comunidade também pode <em style="color:var(--verde-claro)">contar sua história</em></h2>
     <p style="color:rgba(255,255,255,.8); max-width:600px; margin:14px auto 30px">Organizações, associações e lideranças indígenas podem buscar a Aldeia XP para produção de conteúdo, apoio institucional ou proteção de propriedade intelectual.</p>
     <div class="hero-cta">
-      <a href="https://wa.me/5567000000000?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Aldeia%20XP." target="_blank" class="btn btn-primario">💬 Falar pelo WhatsApp</a>
-      <a href="mailto:contato@aldeiaxp.org.br" class="btn btn-ghost">✉ Enviar e-mail</a>
+      <a href="https://wa.me/5567981644664?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Aldeia%20XP." target="_blank" class="btn btn-primario">💬 Falar pelo WhatsApp</a>
+      <a href="mailto:germano.consneo@gmail.com" class="btn btn-ghost">✉ Enviar e-mail</a>
     </div>
   </div>
 </section>
@@ -869,8 +938,8 @@ footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
     </div>
     <div>
       <h4>Contato</h4>
-      <a href="mailto:contato@aldeiaxp.org.br">contato@aldeiaxp.org.br</a>
-      <a href="https://wa.me/5567000000000" target="_blank">WhatsApp</a>
+      <a href="mailto:germano.consneo@gmail.com">germano.consneo@gmail.com</a>
+      <a href="https://wa.me/5567981644664" target="_blank">WhatsApp</a>
     </div>
   </div>
   <div class="foot-bottom">
