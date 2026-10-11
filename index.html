@@ -120,6 +120,7 @@ img{max-width:100%}
 .sobre-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:60px; align-items:center; position:relative; z-index:1}
 @media(max-width:900px){.sobre-grid{grid-template-columns:1fr; gap:36px}}
 .sobre-arte{display:flex; justify-content:center}
+#sobre{overflow-x:clip} /* os círculos pulsantes do disco não estouram a largura no celular */
 .sobre-disc{width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(208,32,46,.08),transparent 70%);border:1.5px solid rgba(208,32,46,.18);display:grid;place-items:center;position:relative;animation:float 6s ease-in-out infinite}
 .sobre-disc::before{content:"";position:absolute;inset:22px;border-radius:50%;border:1px dashed rgba(27,122,61,.25)}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
@@ -261,7 +262,8 @@ img{max-width:100%}
 /* ===== RODAPE ===== */
 footer{background:#0A0C0E; padding:70px 0 0; color:rgba(255,255,255,.85)}
 .footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:36px; padding-bottom:50px}
-@media(max-width:800px){.footer-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:800px){.footer-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media(max-width:520px){.footer-grid{grid-template-columns:minmax(0,1fr)}}
 .footer-grid h4{color:#fff; font-size:.9rem; margin-bottom:14px}
 .footer-grid a{display:block; color:rgba(255,255,255,.6); font-size:.86rem; margin-bottom:10px; transition:.2s}
 .footer-grid a:hover{color:var(--verde-claro)}
@@ -4135,7 +4137,19 @@ var DB_KEY = 'aldeiaxp_db_v1';
 var GH_OWNER = 'germanocoelho';
 var GH_REPO = 'aldeiaxp.github.io';
 var GH_FILE = 'dados.json';
-var GH_TOKEN = ['ghp_QHZ8d7o','slad0SwPe6','UKiFvV6ZTh','dqA3w7DHP'].join('');
+// Token do GitHub guardado CIFRADO com a senha de ADM (PBKDF2 + AES-GCM).
+// Só é decifrado, em memória, quando o ADM entra com a senha.
+var GH_TOKEN_CIFRADO = {s:'Gw1O2y3tLM+3VvgM+Wnmhg==', iv:'9eGflXWvp0wyW0wD', c:'hqmiJSKF8CJ3t6TowtBtLI6EJnGLnQ98goZWJRGpPjQCkHDnMK7L9MdxqncjKYJ/w50huzKjfKo=', it:600000};
+var GH_TOKEN = '';
+function _b64bytes(s){ var b=atob(s), u=new Uint8Array(b.length); for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i); return u; }
+function abrirTokenGH(senha){
+  if(!(window.crypto && crypto.subtle && window.TextEncoder)) return Promise.resolve(false);
+  var c=GH_TOKEN_CIFRADO;
+  return crypto.subtle.importKey('raw', new TextEncoder().encode(senha), 'PBKDF2', false, ['deriveKey'])
+    .then(function(k){ return crypto.subtle.deriveKey({name:'PBKDF2', salt:_b64bytes(c.s), iterations:c.it, hash:'SHA-256'}, k, {name:'AES-GCM', length:256}, false, ['decrypt']); })
+    .then(function(key){ return crypto.subtle.decrypt({name:'AES-GCM', iv:_b64bytes(c.iv)}, key, _b64bytes(c.c)); })
+    .then(function(buf){ GH_TOKEN = new TextDecoder().decode(buf); return true; }, function(){ return false; });
+}
 var GH_API = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_FILE;
 var _memDb = {};
 var _ghSha = null;
@@ -4227,7 +4241,7 @@ function dbSalvar(dados) {
 
 function carregarDoGitHub() {
   fetch(GH_API + '?t=' + Date.now(), {
-    headers: { 'Authorization': 'token ' + GH_TOKEN }
+    headers: GH_TOKEN ? { 'Authorization': 'token ' + GH_TOKEN } : {}
   })
   .then(function(r) { return r.json(); })
   .then(function(res) {
@@ -4401,7 +4415,6 @@ function admHash(s) {
   for (var i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h |= 0; }
   return (h >>> 0).toString(16).slice(0, 8);
 }
-var ADM_HASH = '201a30fe'; // senha: aldeiaxp2026
 
 function abrirAdm(e) {
   if(e) { e.preventDefault(); e.stopPropagation(); }
@@ -4471,7 +4484,8 @@ async function siEnviarEPublicar() {
 function admLogin() {
   var pw = document.getElementById('adm-pw').value;
   var err = document.getElementById('adm-err');
-  if (admHash(pw) === ADM_HASH) {
+  abrirTokenGH(pw).then(function(ok){
+  if (ok) {
     // Adicionar classe ao body - o CSS body.adm-ok .adm-panel faz o resto
     document.body.classList.add('adm-ok');
     // Remover inline styles que possam sobrepor o CSS
@@ -4487,11 +4501,13 @@ function admLogin() {
       if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
       document.querySelectorAll('.galeria-masonry').forEach(function(grid){ ativarDragDrop(grid); ativarEdicaoLegenda(grid); });
     }, 500);
+    if (typeof _cdIniciarTudoAposLogin === 'function') _cdIniciarTudoAposLogin();
   } else {
     err.style.display = 'block';
     document.getElementById('adm-pw').value = '';
     document.getElementById('adm-pw').focus();
   }
+  });
 }
 
 // === NOTIFICAÇÃO TOAST ===
@@ -4578,15 +4594,14 @@ window.addEventListener('scroll', function() {
 // Inicializar .art-panel display
 document.querySelectorAll('.art-panel').forEach(function(p){ p.style.display='none'; });
 document.querySelectorAll('.art-panel.ativo').forEach(function(p){ p.style.display='block'; });
-// Override trocarArtTab para display
-var _trocarArtTab = trocarArtTab;
-trocarArtTab = function(btn, panelId) {
+// Tabs dos artigos (troca o painel exibido)
+function trocarArtTab(btn, panelId) {
   document.querySelectorAll('#artigos-tabs .doc-tab').forEach(function(t){ t.classList.remove('ativo'); });
   document.querySelectorAll('.art-panel').forEach(function(p){ p.style.display='none'; p.classList.remove('ativo'); });
   btn.classList.add('ativo');
   var panel = document.getElementById(panelId);
   if (panel) { panel.style.display='block'; panel.classList.add('ativo'); }
-};
+}
 
 // === PUBLICAR ARTIGO ===
 
@@ -6739,7 +6754,10 @@ function siFormatarData(ts){ return ts ? new Date(ts).toLocaleString('pt-BR',{da
 // Inicializar quando o ADM for aberto
 var _siInitDone = false;
 var _siOrigAdmLogin = typeof admLogin === 'function' ? admLogin : null;
+var _cdIniciado = false;
 function _cdIniciarTudoAposLogin() {
+  if (_cdIniciado) return; // evita carregar duas vezes (botão + Enter)
+  _cdIniciado = true;
   // Os dados privados (conselheiros, mídia, documentos, auditoria) só são
   // buscados AGORA, depois do login confirmado — nunca no carregamento
   // público da página.
